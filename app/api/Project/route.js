@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import Project from '@/app/models/Project';
 import connectionString from "@/app/libs/mongodb";
+import mongoose from 'mongoose';
 
-
-
-// GET single project
+// GET all projects
 export async function GET() {
   try {
     await connectionString();
@@ -16,6 +15,67 @@ export async function GET() {
   }
 }
 
+// POST new project
+export async function POST(request) {
+  try {
+    await connectionString();
+    
+    const body = await request.json();
+    
+    // Validate required fields
+    if (!body.title || !body.projectNumber || !body.description || !body.fullDescription || !body.category) {
+      return NextResponse.json(
+        { error: 'Missing required fields: title, projectNumber, description, fullDescription, and category are required' },
+        { status: 400 }
+      );
+    }
+    
+    // Check if projectNumber already exists
+    const existingProject = await Project.findOne({ projectNumber: body.projectNumber });
+    if (existingProject) {
+      return NextResponse.json(
+        { error: 'Project number already exists' },
+        { status: 409 }
+      );
+    }
+    
+    // Create new project
+    const project = await Project.create(body);
+    
+    return NextResponse.json(project, { status: 201 });
+  } catch (error) {
+    console.error('Error creating project:', error);
+    
+    // Handle validation errors
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.keys(error.errors).map(key => ({
+        field: key,
+        message: error.errors[key].message
+      }));
+      
+      return NextResponse.json(
+        { 
+          error: 'Validation error', 
+          details: validationErrors 
+        },
+        { status: 400 }
+      );
+    }
+    
+    // Handle duplicate key error
+    if (error.code === 11000) {
+      return NextResponse.json(
+        { error: 'Project number already exists' },
+        { status: 409 }
+      );
+    }
+    
+    return NextResponse.json(
+      { error: 'Failed to create project' },
+      { status: 500 }
+    );
+  }
+}
 
 // PUT update project
 export async function PUT(request, { params }) {

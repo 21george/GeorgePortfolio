@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -36,18 +35,16 @@ export default function WelcomeNote() {
   // GSAP animation
   useGSAP(() => {
     NoteWelcome.forEach((note, index) => {
-      // Animate heading
       gsap.fromTo(
         `.note-heading-${index}`,
         { y: 100, opacity: 0 },
         { y: 0, opacity: 1, duration: 1, delay: index * 0.3, ease: 'power3.out' }
       );
 
-      // Animate paragraph
       gsap.fromTo(
         `.note-content-${index}`,
         { y: 50, opacity: 0 },
-        { y: 1, opacity: 1, duration: 1, delay: 0.2 + index * 0.3, ease: 'power3.out' }
+        { y: 0, opacity: 1, duration: 1, delay: 0.2 + index * 0.3, ease: 'power3.out' }
       );
     });
   }, [NoteWelcome]);
@@ -70,7 +67,6 @@ export default function WelcomeNote() {
 
   return (
     <main className="relative h-screen w-full overflow-hidden transition-colors duration-300">
-      {/* Content Section */}
       <section className="hero-text-wrapper relative z-10 flex flex-col items-center justify-center h-full px-4 sm:px-6 lg:px-8 text-center">
         <div className="mx-auto w-full">
           <div className="flex justify-center text-gray-900 dark:text-white mt-[-8em] px-4 sm:px-6 lg:px-8">
@@ -80,9 +76,9 @@ export default function WelcomeNote() {
                   key={note._id}
                   className="p-6 sm:p-8 lg:p-10 mb-8 w-full duration-300 hover:scale-[1.02]"
                 >
-                  {/* Animated heading */}
+                  {/* Fixed Animated heading */}
                   <h2
-                    className={`note-heading-${index} w-full text-white dark:text-white text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold mb-8 text-center font-['Bitcount'] leading-tight tracking-wide`}
+                    className={`note-heading-${index} text-white dark:text-white text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl text-gray-700 font-bold mb-8 text-center font-['Bitcount'] leading-tight tracking-wide`}
                   >
                     {note.name}
                   </h2>
@@ -91,9 +87,7 @@ export default function WelcomeNote() {
                   <div
                     className={`note-content-${index} text-base sm:text-lg lg:text-xl leading-relaxed space-y-4 font-['Geist_Mono'] text-gray-700 dark:text-gray-300 break-words`}
                   >
-                    <p className="text-base text-gray-700 dark:text-gray-300">
-                      {note.massage}
-                    </p>
+                    
                   </div>
                 </div>
               ))}

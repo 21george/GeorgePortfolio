@@ -33,10 +33,11 @@ export default function NavigationBar() {
 
   const navItems = [
     { name: "Home", link: "/" },
-    { name: "About", link: "/about" },
+    { name: "About", link: "/pages/Aboutme" },
     { name: "Projects", link: "/pages/Projects" },
     { name: "FQA", link: "/pages/FQAPage" },
     { name: "Contact", link: "/pages/Contacts" },
+    { name: "Postform", link: "/pages/Postrequest" },
   ];
 
   if (!isLoaded) {
@@ -78,26 +79,13 @@ export default function NavigationBar() {
         </div>
 
       {/* Dark mode toggle */}
-      <div className="flex items-center z-50">
-        <button
-          onClick={toggleTheme}
-          className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-gray-200/20 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/50 hover:bg-gray-200/30 dark:hover:bg-gray-700/50 transition-all duration-300"
-          aria-label="Toggle theme"
-        >
-          {isDarkMode ? (
-            <>
-              <Sun size={16} className="text-yellow-400" />
-              <span className="text-sm text-gray-800 dark:text-gray-200 hidden sm:inline">Light</span>
-            </>
-          ) : (
-            <>
-              <Moon size={16} className="text-blue-600" />
-              <span className="text-sm text-gray-800 dark:text-gray-200 hidden sm:inline">Dark</span>
-            </>
-          )}
-        </button>
-      </div>
-
+      
+       <div id="logo-link-container" class="">
+                  <svg width="20" height="47" viewBox="0 0 20 47" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo" id="logo">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20.0002 12.3494V7.73741L0.000244141 0V4.52789L4.45404 6.13163L7.73094 7.30767L15.07 9.97153V10.0291L7.73094 12.6076L4.45404 13.7823L0.000244141 15.3304V20L20.0002 12.3494Z"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 34.1635L20 27V31.993L5.93817 36.923V36.9853L20 41.9762L20 47L0 39.6517L0 34.1635Z"></path>
+                  </svg>
+                </div>
       {/* Menu Toggle with White Circle */}
       <div
         onClick={() => setIsOpen(!isOpen)}  
