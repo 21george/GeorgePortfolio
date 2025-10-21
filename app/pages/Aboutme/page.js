@@ -47,31 +47,46 @@ export default function AboutMePage() {
   return (
     <main className="bg-black dark:bg-black-900 text-black dark:text-white min-h-screen transition-colors duration-300">
       {/* Header Section */}
-      <section className="pt-20 sm:pt-28 md:pt-36 pb-10 sm:pb-16 md:pb-20 px-4 sm:px-8 lg:px-16 relative overflow-hidden">
-        <div className="faq_header relative w-full text-center sm:text-left">
-          <div className="faq_header-wrapper mx-auto flex flex-col sm:flex-row items-center justify-center sm:justify-between">
-            <div className="flex-1 font-mono text-gray-500 dark:text-gray-400 sm:pl-6 md:pl-8">
-              <h2 className="faq-h6 text-5xl sm:text-5xl md:text-8xl lg:text-[10rem] xl:text-[12rem] font-extrabold uppercase text-gray-900 dark:text-white leading-tight sm:-translate-x-4 md:-translate-x-6">
-                Hello Im George
-              </h2>
-            </div>
-          </div>
-        </div>
+    <section className="pt-24 h-[34em] sm:pt-32 pb-12 sm:pb-20 px-6 sm:px-10 lg:px-16 relative overflow-hidden">
+  {/* Subtle Gradient / Background */}
+  <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black opacity-90" />
+  <div className="relative z-10">
+    <div className="mx-auto flex flex-col sm:flex-row items-center justify-between">
+      <div className="flex-1 text-center sm:text-left font-mono text-gray-500 dark:text-gray-400">
+        {/* Layered Title Style */}
+        <h2 className="faq-h1 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold uppercase text-gray-900 dark:text-white leading-tight">
+          Hello,
+        </h2>
+        <h2 className="faq-h2 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold uppercase text-gray-900 dark:text-white leading-tight">
+          I’m <span className="text-red-500 dark:text-red-400">George</span>
+        </h2>
+        {/* Subtext */}
+        <p className="mt-6 text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl">
+          A Software Developer focused on designing and building engaging, high-performance web applications
+          that merge functionality with elegant design.
+        </p>
+      </div>
 
-        {/* Responsive Image - Much Bigger */}
-        <div className="relative w-full mt-[-8rem] sm:mt-2 lg:mt-[-12] flex justify-center">
-          <div className="w-full max-w-[1400px]">
-            <Image
-              src={IMG_0879}
-              alt="George - About Me"
-              width={1400}
-              height={1400}
-              className="w-[50em] h-[50em] sm:w-[60em] sm:h-[60em] lg:w-[70em] lg:h-[70em] object-cover transition-transform duration-500"
-              priority
-            />
-          </div>
+      {/* Hero Image */}
+      <div className="flex-1 mt-12 sm:mt-0 flex justify-center">
+        <div className="relative w-[18rem] h-[18rem] sm:w-[24rem] sm:h-[24rem] md:w-[28rem] md:h-[28rem]  overflow-hidden ">
+          <Image
+            src={IMG_0879}
+            alt="George - Software Developer"
+            fill
+            className="object-cover hover:scale-105 transition-transform duration-700"
+            priority
+          />
         </div>
-      </section>
+      </div>
+          </div>
+           <h2 className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[15vw] font-extrabold uppercase text-gray-800/10 tracking-tight select-none pointer-events-none">
+    George
+  </h2>
+  </div>
+</section>
+
+
 
       {/* About Section */}
       <section className="pt-20 sm:pt-28 md:pt-32 pb-10 sm:pb-16 md:pb-20 px-4 sm:px-8 lg:px-16 relative overflow-hidden">
@@ -100,28 +115,7 @@ export default function AboutMePage() {
             </p>
           </div>
 
-          <div className="pt-4">
-            <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3">
-              Skills & Technologies
-            </h4>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              {[
-                "React",
-                "Next.js",
-                "JavaScript",
-                "TypeScript",
-                "Node.js",
-                "Tailwind CSS",
-              ].map((skill) => (
-                <span
-                  key={skill}
-                  className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm sm:text-base font-medium transition-transform hover:scale-105"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+       
         </div>
       </section>
     </main>
