@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Image } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -10,6 +10,7 @@ gsap.registerPlugin(useGSAP);
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [focusedCardIndex, setFocusedCardIndex] = useState(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -33,6 +34,20 @@ export default function ProjectsPage() {
     gsap.fromTo(selector, { y: 100, opacity: 0 }, vars);
   };
 
+  useGSAP(() => {
+    animateText('.faq-h1', { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' });
+    animateText('.faq-h2', { y: 0, opacity: 1, duration: 1.2, delay: 0.2, ease: 'power3.out' });
+    animateText('.faq-h3', { y: 0, opacity: 1, duration: 1.2, delay: 0.4, ease: 'power3.out' });
+  }, []);
+
+  const handleFocus = (index) => {
+    setFocusedCardIndex(index);
+  };
+
+  const handleBlur = () => {
+    setFocusedCardIndex(null);
+  };
+
   // Function to extract domain and get favicon
   const getFaviconUrl = (url) => {
     try {
@@ -43,54 +58,58 @@ export default function ProjectsPage() {
     }
   };
 
-  const ProjectMedia = ({ project, className }) => {
+  // Get project category/tag
+  const getProjectTag = (project) => {
+    if (project.technologies && project.technologies.length > 0) {
+      return project.technologies[0];
+    }
+    return 'Development';
+  };
+
+  // Default RN Image Component
+  const DefaultRNImage = ({ project }) => (
+    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white">
+      <div className="text-center">
+        <div className="text-4xl mb-2">⚛️</div>
+        <div className="text-sm font-semibold">React Native</div>
+        <div className="text-xs opacity-80 mt-1">{project.title}</div>
+      </div>
+    </div>
+  );
+
+  // Project Media Component
+  const ProjectMedia = ({ project }) => {
     const [imageError, setImageError] = useState(false);
     const [videoError, setVideoError] = useState(false);
     const [faviconError, setFaviconError] = useState(false);
-
-    const MediaPlaceholder = () => (
-      <div className={`bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center ${className}`}>
-        <div className="text-center text-white">
-          <div className="text-5xl mb-2">🚀</div>
-          <div className="text-base font-medium">{project.title}</div>
-        </div>
-      </div>
-    );
 
     const DefaultImage = () => {
       const faviconUrl = getFaviconUrl(project.liveUrl);
       
       return (
-        <div className={`bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center ${className}`}>
+        <div className="w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center rounded-lg">
           {faviconUrl && !faviconError ? (
             <div className="text-center">
               <img
                 src={faviconUrl}
                 alt="Site favicon"
-                className="w-16 h-16 mb-4 mx-auto"
+                width="48"
+                height="48"
+                className="w-12 h-12 mb-2 mx-auto"
                 onError={() => setFaviconError(true)}
               />
-              <div className="text-lg font-medium text-gray-700 dark:text-gray-300">{project.title}</div>
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300">{project.title}</div>
             </div>
           ) : (
-            <div className="text-center text-gray-600 dark:text-gray-400">
-              <div className="text-5xl mb-2">🌐</div>
-              <div className="text-base font-medium">{project.title}</div>
-            </div>
+            <DefaultRNImage project={project} />
           )}
         </div>
       );
     };
 
-    useGSAP(() => {
-      animateText('.faq-h1', { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out' });
-      animateText('.faq-h2', { y: 0, opacity: 1, duration: 1.2, delay: 0.2, ease: 'power3.out' });
-      animateText('.faq-h3', { y: 0, opacity: 1, duration: 1.2, delay: 0.4, ease: 'power3.out' });
-    }, []);
-
     if (project.videoUrl && !videoError) {
       return (
-        <div className={`relative ${className}`}>
+        <div className="w-full h-48 relative rounded-lg overflow-hidden">
           <video
             muted
             loop
@@ -107,12 +126,12 @@ export default function ProjectsPage() {
 
     if (project.imageUrl && !imageError) {
       return (
-        <div className={`relative ${className}`}>
+        <div className="w-full h-48 relative rounded-lg overflow-hidden">
           <Image
             src={project.imageUrl}
             alt={project.title}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-300 hover:scale-105"
             onError={() => setImageError(true)}
           />
         </div>
@@ -122,39 +141,61 @@ export default function ProjectsPage() {
     return <DefaultImage />;
   };
 
-  // Define the ProjectCard component
-  const ProjectCard = ({ project, getFaviconUrl }) => (
-    <div className="shadow-lg overflow-hidden flex flex-col">
-      <div className="relative h-56 w-full">
-        <ProjectMedia project={project} className="h-full w-full" />
+  // Project Links Component (fixed favicon issue)
+  const ProjectLinks = ({ project }) => (
+    <div className="flex items-center justify-between w-full">
+      <div className="flex items-center gap-4 text-sm">
+        {project.liveUrl && (
+          <Link 
+            href={project.liveUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="flex items-center text-blue-600 dark:text-blue-400 hover:underline transition-colors"
+          >
+            <img
+              src={getFaviconUrl(project.liveUrl)}
+              alt="Favicon"
+              width="16"
+              height="16"
+              className="w-4 h-4 mr-1"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+            Live Demo
+          </Link>
+        )}
+        {project.repoUrl && (
+          <Link 
+            href={project.repoUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+          >
+            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clipRule="evenodd" />
+            </svg>
+            Repository
+          </Link>
+        )}
       </div>
-      <div className="p-6 flex flex-col flex-1">
-        <p className="text-gray-600 dark:text-gray-300 mb-4 flex-1">{project.description}</p>
-        <div className="flex items-center space-x-4 mt-auto">
-          {project.liveUrl && (
-            <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline">
-              <img
-                src={getFaviconUrl(project.liveUrl)}
-                alt="Favicon"
-                className="w-5 h-5 mr-2"
-                onError={(e) => { e.target.style.display = 'none'; }}
-              />
-              Live
-            </Link>
-          )}
-          {project.repoUrl && (
-            <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:underline">
-              <span className="material-icons mr-1">code</span>
-              Repo
-            </Link>
-          )}
-        </div>
-      </div>
+      <span className="text-xs text-gray-500 dark:text-gray-400">
+        {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : 'Recent'}
+      </span>
     </div>
   );
 
+  if (loading) {
+    return (
+      <main className="bg-white dark:bg-neutral-900 text-black dark:text-white min-h-screen transition-colors duration-300">
+        <div className="pt-24 px-6 sm:px-10 lg:px-16">
+          <div className="animate-pulse">Loading projects...</div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="bg-white dark:bg-neutral-900 text-black dark:text-white min-h-screen transition-colors duration-300">
+      {/* Header section */}
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-6 sm:px-10 lg:px-16 relative overflow-hidden">
         <div className="faq_header relative">
           <div className="faq_header-wrapper mx-auto flex flex-col sm:flex-row items-center justify-between">
@@ -167,18 +208,90 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <section className="selected-work py-24 px-6 sm:px-10 lg:px-16 w-full flex justify-center">
-        <div className="selected-work-container max-w-7xl w-full">
-          <div className="space-y-16">
-            {Array.from({ length: Math.ceil(projects.length / 2) }).map((_, rowIndex) => (
-              <div key={rowIndex} className="selected-work-grid grid grid-cols-1 sm:grid-cols-2 gap-10">
-                {projects
-                  .slice(rowIndex * 2, rowIndex * 2 + 2)
-                  .map((project) => (
-                    <ProjectCard key={project._id} project={project} getFaviconUrl={getFaviconUrl} />
-                  ))}
+      {/* Projects list */}
+      <section className="py-16 px-6 sm:px-10 lg:px-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+            {projects.map((project, index) => (
+              <div key={project._id} className="flex flex-col gap-4 h-full">
+                <ProjectMedia project={project} />
+                
+                <div className="flex flex-col gap-2 flex-1">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium">
+                    {getProjectTag(project)}
+                  </div>
+                  
+                  <h3 
+                    className={`text-xl font-semibold cursor-pointer relative group transition-all duration-300 ${
+                      focusedCardIndex === index ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400'
+                    }`}
+                    onFocus={() => handleFocus(index)}
+                    onBlur={handleBlur}
+                    onMouseEnter={() => handleFocus(index)}
+                    onMouseLeave={handleBlur}
+                    tabIndex={0}
+                  >
+                    {project.title}
+                    <svg 
+                      className={`inline-block w-4 h-4 ml-2 transition-all duration-300 ${
+                        focusedCardIndex === index ? 'opacity-70 visible' : 'opacity-0 invisible'
+                      }`}
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                      style={{
+                        position: 'absolute',
+                        right: 0,
+                        top: '50%',
+                        transform: 'translateY(-50%)'
+                      }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    <div 
+                      className={`absolute bottom-0 left-0 h-px bg-current transition-all duration-300 ${
+                        focusedCardIndex === index ? 'w-full opacity-30' : 'w-0 opacity-0'
+                      }`}
+                    />
+                  </h3>
+                  
+                  <div 
+                    className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed flex-1"
+                    style={{
+                      display: '-webkit-box',
+                      WebkitBoxOrient: 'vertical',
+                      WebkitLineClamp: 2,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
+                    {project.description}
+                  </div>
+
+                  <div className="mt-4">
+                    <ProjectLinks project={project} />
+                  </div>
+                </div>
               </div>
             ))}
+          </div>
+          
+          {/* Pagination */}
+          <div className="flex justify-center pt-8">
+            <div className="flex space-x-2">
+              {Array.from({ length: Math.min(5, Math.ceil(projects.length / 10)) }, (_, i) => (
+                <button
+                  key={i}
+                  className={`px-3 py-1 text-sm rounded transition-colors ${
+                    i === 0 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>

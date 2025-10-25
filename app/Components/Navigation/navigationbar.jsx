@@ -5,6 +5,8 @@ import { useGSAP } from "@gsap/react";
 import { Github, Instagram, Sun, Moon } from "lucide-react";
 import { useTextAnimation } from "../../hooks/useTextAnimation";
 import { useTheme } from "../../context/ThemeContext";
+import logoIvon from "/public/Image/1.png";
+import Image from "next/image"; // ✅ Correct import
 
 export default function NavigationBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,16 +19,14 @@ export default function NavigationBar() {
         clipPath: "inset(0% 100% 0% 0%)",
       });
 
-      // Animate navigation items using the custom hook
-      animateText('.nav-text', {
+      animateText(".nav-text", {
         y: 20,
         autoAlpha: 0,
         stagger: 0.05,
         duration: 0.6,
-        ease: "power2.out"
+        ease: "power2.out",
       });
     } else {
-      // Cleanup when menu closes
       cleanup();
     }
   }, [isOpen, animateText, cleanup]);
@@ -39,45 +39,48 @@ export default function NavigationBar() {
     { name: "Contact", link: "/pages/Contacts" },
   ];
 
-  if (!isLoaded) {
-    return null; // Prevent flash of incorrect theme
-  }
+  if (!isLoaded) return null;
 
   return (
     <nav className="fixed w-full p-2 sm:p-4 md:p-6 lg:p-10 z-40 text-gray-800 dark:text-gray-100 flex items-center justify-between bg-transparent">
       {/* Logo */}
       <div className="header-logo">
-          <a id="logo-link" href="./" aria-label="Go back to homepage" className="logo-home-link">
-            <div className="logo-home-wrapper">
-              <div id="logo-home" className="">
-                <div className="logo-text logo-text-1">
-                  <svg width="56" height="22" viewBox="0 0 56 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="first">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M4.40776 0.488281V17.2157H14.177V21.0098H0V0.488281H4.40776Z"></path>
-                    <path fillRule="evenodd" clipRule="evenodd" d="M31.3866 19.4437C29.8698 20.7947 27.7745 21.4699 25.0981 21.4699C22.3845 21.4699 20.2825 20.7995 18.7956 19.4573C17.3073 18.1171 16.5635 16.0466 16.5635 13.2493V0.488037H20.9712V13.2493C20.9712 13.8055 21.0171 14.3515 21.112 14.888C21.2057 15.4252 21.4009 15.8984 21.7018 16.3104C22.0006 16.7232 22.417 17.0584 22.9503 17.3161C23.4836 17.5752 24.1989 17.7043 25.0981 17.7043C26.6694 17.7043 27.7552 17.3447 28.3549 16.628C28.9533 15.9086 29.2522 14.7819 29.2522 13.2493V0.488037H33.6599V13.2493C33.6599 16.0289 32.9015 18.0926 31.3866 19.4437Z"></path>
-                    <path fillRule="evenodd" clipRule="evenodd" d="M50.3066 5.96408C50.0442 5.53163 49.7168 5.15426 49.323 4.82856C48.9305 4.50219 48.4862 4.24925 47.9901 4.06702C47.494 3.88479 46.974 3.79436 46.4321 3.79436C45.4399 3.79436 44.5985 3.9895 43.9051 4.38251C43.2138 4.77553 42.6519 5.30317 42.2209 5.96408C41.7899 6.62363 41.4778 7.37769 41.2805 8.21879C41.0833 9.06396 40.9856 9.9343 40.9856 10.8345C40.9856 11.6974 41.0833 12.5365 41.2805 13.3504C41.4778 14.1649 41.7899 14.8972 42.2209 15.5493C42.6519 16.2 43.2138 16.7229 43.9051 17.1159C44.5985 17.5089 45.4399 17.7041 46.4321 17.7041C47.7796 17.7041 48.8329 17.2825 49.59 16.4394C50.3477 15.5962 50.8113 14.4852 50.9807 13.1063H55.2476C55.1347 14.3893 54.8445 15.5493 54.377 16.5835C53.9088 17.6177 53.2911 18.5003 52.5241 19.2285C51.7563 19.9561 50.8578 20.5129 49.8297 20.8951C48.799 21.2786 47.6674 21.4696 46.4321 21.4696C44.8973 21.4696 43.5173 21.1963 42.2906 20.651C41.066 20.105 40.032 19.353 39.1892 18.3942C38.3464 17.4362 37.7009 16.3109 37.252 15.0169C36.803 13.7237 36.5779 12.3298 36.5779 10.8345C36.5779 9.30195 36.803 7.87949 37.252 6.56787C37.7009 5.25421 38.3464 4.10918 39.1892 3.13277C40.032 2.155 41.066 1.3887 42.2906 0.832502C43.5173 0.277663 44.8973 0.000244141 46.4321 0.000244141C47.5372 0.000244141 48.5799 0.162072 49.5628 0.488447C50.545 0.814143 51.4249 1.28875 52.2006 1.9109C52.977 2.53373 53.6185 3.30412 54.1246 4.22477C54.63 5.14338 54.9468 6.1973 55.0789 7.38653H50.8113C50.7363 6.86909 50.5689 6.39448 50.3066 5.96408Z"></path>
-                  </svg>
-                </div>
-                <div id="logo-link-container">
-                  <svg width="20" height="47" viewBox="0 0 20 47" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo" id="logo">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M20.0002 12.3494V7.73741L0.000244141 0V4.52789L4.45404 6.13163L7.73094 7.30767L15.07 9.97153V10.0291L7.73094 12.6076L4.45404 13.7823L0.000244141 15.3304V20L20.0002 12.3494Z"></path>
-                    <path fillRule="evenodd" clipRule="evenodd" d="M0 34.1635L20 27V31.993L5.93817 36.923V36.9853L20 41.9762L20 47L0 39.6517L0 34.1635Z"></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
+        <a href="/" aria-label="Go back to homepage" className="logo-home-link flex items-center">
+          <Image
+            src={logoIvon}
+            alt="Logo"
+            width={50}  // ✅ added dimensions to avoid warnings
+            height={50}
+            className="rounded-full"
+            priority
+          />
+          <div className="ml-2">
+            <svg
+              width="56"
+              height="22"
+              viewBox="0 0 56 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="first"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M4.40776 0.488281V17.2157H14.177V21.0098H0V0.488281H4.40776Z"
+              ></path>
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M31.3866 19.4437C29.8698 20.7947 27.7745 21.4699 25.0981 21.4699C22.3845 21.4699 20.2825 20.7995 18.7956 19.4573C17.3073 18.1171 16.5635 16.0466 16.5635 13.2493V0.488037H20.9712V13.2493C20.9712 13.8055 21.0171 14.3515 21.112 14.888C21.2057 15.4252 21.4009 15.8984 21.7018 16.3104C22.0006 16.7232 22.417 17.0584 22.9503 17.3161C23.4836 17.5752 24.1989 17.7043 25.0981 17.7043C26.6694 17.7043 27.7552 17.3447 28.3549 16.628C28.9533 15.9086 29.2522 14.7819 29.2522 13.2493V0.488037H33.6599V13.2493C33.6599 16.0289 32.9015 18.0926 31.3866 19.4437Z"
+              ></path>
+            </svg>
+          </div>
+        </a>
+      </div>
 
-      {/* Dark mode toggle */}
-       <div id="logo-link-container">
-                  <svg width="20" height="47" viewBox="0 0 20 47" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo" id="logo">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M20.0002 12.3494V7.73741L0.000244141 0V4.52789L4.45404 6.13163L7.73094 7.30767L15.07 9.97153V10.0291L7.73094 12.6076L4.45404 13.7823L0.000244141 15.3304V20L20.0002 12.3494Z"></path>
-                    <path fillRule="evenodd" clipRule="evenodd" d="M0 34.1635L20 27V31.993L5.93817 36.923V36.9853L20 41.9762L20 47L0 39.6517L0 34.1635Z"></path>
-                  </svg>
-                </div>
-      {/* Menu Toggle with White Circle */}
+      {/* Menu Toggle Button */}
       <div
-        onClick={() => setIsOpen(!isOpen)}  
+        onClick={() => setIsOpen(!isOpen)}
         className="cursor-pointer relative z-50 w-14 h-14 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
       >
         <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-black">
@@ -86,50 +89,47 @@ export default function NavigationBar() {
       </div>
 
       {/* Navigation Overlay */}
-      <div className={`${isOpen ? "h-full opacity-100" : "h-0 opacity-0"} bg-white dark:bg-neutral-800 fixed inset-0 overflow-hidden transition-all duration-500 ease-in-out`}>
+      <div
+        className={`${
+          isOpen ? "h-full opacity-100" : "h-0 opacity-0"
+        } bg-white dark:bg-neutral-800 fixed inset-0 overflow-hidden transition-all duration-500 ease-in-out`}
+      >
         <div className="flex flex-col justify-between h-full p-4 xs:p-6 sm:p-8 md:p-12 lg:p-20">
-          {/* Top Section */}
-          <div className="flex flex-col sm:flex-row justify-between pt-[14em] xs:pt-[5em] sm:pt-[16em] md:pt-[10em] lg:pt-[12em]">
-            {/* Navigation Links */}
-            <div className="flex flex-col justify-center w-full sm:w-1/2 transform:translate3d(0%, 0%, 0%) space-y-2 xs:space-y-3 sm:space-y-4 md:space-y-5 
-                         uppercase tracking-tight text-5xl sm:text-4xl md:text-5xl lg:text-6xl leading-none
-                         font-[Brockmann,Tahoma,sans-serif] text-center sm:text-left"
-            >
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.link}
-                  className="text-gray-900 dark:text-white flex items-center sm:items-start justify-center sm:justify-start relative overflow-hidden 
-                             cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300 py-1 nav-text opacity-0"
-                >
-                  {item.name}
-                </a>
-              ))}
-            </div>
+          {/* Navigation Links */}
+          <div className="flex flex-col justify-center w-full sm:w-1/2 space-y-5 uppercase tracking-tight text-5xl sm:text-4xl md:text-5xl lg:text-6xl leading-none font-[Brockmann,Tahoma,sans-serif] text-center sm:text-left">
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.link}
+                className="text-gray-900 dark:text-white flex justify-center sm:justify-start relative overflow-hidden cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300 py-1 nav-text opacity-0"
+              >
+                {item.name}
+              </a>
+            ))}
           </div>
 
-          {/* Bottom Line + Social Media */}
-          <div className="w-full flex flex-col sm:flex-row items-center justify-between mt-6 sm:mt-8 md:mt-10 border-t border-gray-300 dark:border-gray-700 pt-4 sm:pt-6 space-y-3 sm:space-y-0 text-center sm:text-left">
+          {/* Footer Section */}
+          <div className="w-full flex flex-col sm:flex-row items-center justify-between mt-6 border-t border-gray-300 dark:border-gray-700 pt-4 sm:pt-6 text-center sm:text-left">
             <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 tracking-wide">
               © {new Date().getFullYear()} George — All Rights Reserved
             </div>
 
-            <div className="flex space-x-3 sm:space-x-4 md:space-x-6">
+            <div className="flex space-x-4">
               <a
                 href="https://github.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors p-1"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
               >
-                <Github size={18} className="xs:w-5 xs:h-5 sm:w-6 sm:h-6" />
+                <Github size={22} />
               </a>
               <a
                 href="https://instagram.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors p-1"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
               >
-                <Instagram size={18} className="xs:w-5 xs:h-5 sm:w-6 sm:h-6" />
+                <Instagram size={22} />
               </a>
             </div>
           </div>

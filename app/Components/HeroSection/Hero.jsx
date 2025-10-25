@@ -29,9 +29,6 @@ export default function Hero() {
       </div>
 
       {/* Floating Elements */}
-      <div className="absolute bottom-8 left-8 w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
-      <div className="absolute top-1/4 right-8 w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
-      <div className="absolute top-1/3 left-1/4 w-1.5 h-1.5 bg-green-500 rounded-full animate-bounce"></div>
     </div>
   );
 }
